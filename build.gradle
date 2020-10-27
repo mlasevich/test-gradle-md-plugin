@@ -1,0 +1,17 @@
+plugins {
+    id 'nl.martijndwars.markdown' version '0.2.0'
+}
+
+repositories {
+    jcenter()
+}
+
+fileTree(dir: "vars/", includes: ["*.md"]).each {
+    def src = file(it.path)
+    def dest = file((it.path - ".md") + ".txt")
+    println "Processing ${src.name} -> ${dest.name}..."
+    task("compileMarkdownToHtml${dest.name.replaceAll(".", "")}", type: nl.martijndwars.markdown.compileMarkdownToHtmlTask){
+        inputFile src
+        outputFile dest
+    }
+}
